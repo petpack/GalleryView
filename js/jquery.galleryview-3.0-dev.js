@@ -164,6 +164,7 @@ if (typeof Object.create !== 'function') {
 		},
 		
 		setDimensions: function() {
+			//DM: we should maybe reset element sizes according to window size first?
 			var self = this,
 				dom = this.dom,
 				widths = {
@@ -323,9 +324,6 @@ if (typeof Object.create !== 'function') {
 				fsHorz = Math.floor((gv.outerWidth(dom.gv_panelWrap) - gv.outerWidth(dom.gv_filmstripWrap)) / 2);
 			}
 			
-			dom.gv_panelNavNext.css({ top: (gv.outerHeight(dom.gv_panel) - gv.outerHeight(dom.gv_panelNavNext)) / 2, right: 10 });
-			dom.gv_panelNavPrev.css({ top: (gv.outerHeight(dom.gv_panel) - gv.outerHeight(dom.gv_panelNavPrev)) / 2, left: 10 });
-			
 			// pin elements to gallery corners according to filmstrip position
 			switch(this.opts.filmstrip_position) {
 				case 'top':
@@ -364,6 +362,37 @@ if (typeof Object.create !== 'function') {
 			if(!this.opts.show_filmstrip_nav) {
 				dom.gv_navWrap.remove();	
 			}
+			
+		},
+		
+		setNavPosition: function() {
+			/** 
+			 * DM: This function sets the position of the 'next' and 'prev' buttons.
+			 * it assumes that the gallery is visible and in-place, so it must be called after
+			 * show()
+			 */
+			var dom = this.dom,
+				newTop = (gv.outerHeight(dom.gv_panel) - 
+						gv.outerHeight(dom.gv_panelNavNext)) / 2;
+			dom.gv_panelNavNext.css({ top: newTop, right: 10 });
+			dom.gv_panelNavPrev.css({ top: newTop, left: 10 });
+			return false;
+		},
+		
+		resize: function() {
+			/**
+			 * DM: This is called when the window is resized.
+			 */
+			//DM: Toggle filmstrip based on screen size:
+			//this.opts.show_filmstrip = ($(window).width() > 480);
+			
+			//this.setDimensions();
+			//this.setPositions();
+			//this.setNavPosition();
+			
+			if (this.dom.gv_galleryWrap.find("span#resize-info").length == 0)
+				this.dom.gv_galleryWrap.append("<span id='resize-info'><strong><em>Please reload the page to fit the gallery to your screen.</em></strong></span>");
+			
 		},
 		
 		buildFilmstrip: function() {
@@ -1031,8 +1060,11 @@ if (typeof Object.create !== 'function') {
 			dom.gv_frame.remove();
 			
 			// show gallery
-			dom.gv_galleryWrap.show();
 			
+			//DM: note $.proxy call to get correct 'this' context:
+			dom.gv_galleryWrap.show($.proxy(this.setNavPosition,this));
+			
+			$(window).resize($.proxy(this.resize,this));
 			
 			if(this.opts.autoplay) {
 				this.startSlideshow(true);
