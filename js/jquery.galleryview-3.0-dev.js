@@ -391,7 +391,7 @@ if (typeof Object.create !== 'function') {
 			//this.setNavPosition();
 			
 			if (this.dom.gv_galleryWrap.find("span#resize-info").length == 0)
-				this.dom.gv_galleryWrap.append("<span id='resize-info'><strong><em>Please reload the page to fit the gallery to your screen.</em></strong></span>");
+				this.dom.gv_galleryWrap.append("<span id='resize-info'><strong><em>Please reload the page to fit images to your screen.</em></strong></span>");
 			
 		},
 		
