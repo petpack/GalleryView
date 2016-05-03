@@ -4,17 +4,17 @@
 	Author:		Jack Anderson
 	Version:	3.0 DEVELOPMENT
 
-  	See README.txt for instructions on how to markup your HTML
+	See README.txt for instructions on how to markup your HTML
 */
 
 // Make sure Object.create is available in the browser (for our prototypal inheritance)
 // Courtesy of Douglas Crockford
 if (typeof Object.create !== 'function') {
-    Object.create = function (o) {
-        function F() {}
-        F.prototype = o;
-        return new F();
-    };
+	Object.create = function (o) {
+		function F() {}
+		F.prototype = o;
+		return new F();
+	};
 }
 
 (function ($) {
