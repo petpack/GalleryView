@@ -657,16 +657,17 @@ if (typeof Object.create !== 'function') {
 		
 		autoShowOverlay: function(i) {
 			if (this.opts.overlay_visible == "auto") {
-				if (
-					this.gvImages[i].attrs.description.replace(/^\s+|\s+$/g, '') != '' &&
-					this.gvImages[i].attrs.title.replace(/^\s+|\s+$/g, '') != '' 
-					)
-					this.showOverlay()
-				else
-					this.hideOverlay()
-					
+				// show the overlay if either the 
+				// title or caption/description is not empty.
+				if (	this.gvImages[i].attrs.description.trim() || 
+							this.gvImages[i].attrs.title.trim()
+				) {
+					this.showOverlay();
+				} else {
+					this.hideOverlay();
+				}
 			} else if (this.opts.overlay_visible) {
-				this.showOverlay()
+				this.showOverlay();
 			}
 		},
 		
